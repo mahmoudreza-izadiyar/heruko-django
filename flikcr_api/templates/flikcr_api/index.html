@@ -1,0 +1,82 @@
+{% extends 'flikcr_api/layout.html' %}
+{% load static %}
+
+
+{% block body %}
+<!---------------------------------------------------lan and lon search---------------------------------------------------->
+<hr style="height:1px;border-width:0;color:gray;background-color:gray">
+<div class="container" >
+<form class="form-inline" method="POST" action="{% url 'searchLatLon' %}">{% csrf_token %}
+  <div class="form-group mb-2">
+      <h6>
+          Insert longitude
+      </h6>
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <label  class="sr-only">longitude</label>
+    <input type="text" class="form-control" id="longitude" placeholder="longitude" name="longitude">
+  </div>
+     <h6>
+         Insert latitude
+     </h6>
+  <div class="form-group mx-sm-3 mb-2">
+    <label  class="sr-only">latitude</label>
+    <input type="text" class="form-control" id="latitude" placeholder="latitude" name="latitude">
+  </div>
+  <button type="submit" class="btn btn-primary mb-2">Search</button>
+</form>
+</div>
+<hr style="height:1px;border-width:0;color:gray;background-color:gray">
+<!----------------------------------------------Preset Search------------------------------------------------->
+<div class="container">
+
+
+  <form method="POST" action="{% url 'searchCities' %}">{% csrf_token %}
+
+
+
+    <h1>    </h1><h4>Search by Presets Locations</h4>
+    <div class="col-auto">
+      <select class="custom-select custom-select-md mb-3" name="city">
+        <option selected>Chose Preset Locations</option>
+
+        {% for preset in presets%}
+        <option value="{{ preset.id }}">{{ preset.locationName }}
+        {% endfor %}
+
+      </select>
+<button type="submit" class="btn btn-primary mb-2">Search</button>
+    </div>
+
+
+
+
+
+
+  </form>
+
+</div>
+
+<!-------------------------------------------Information about location------------------------------------------------------>
+
+<!----------------------------------------------Result------------------------------------------------------>
+<div class="container">
+{% for address in page.object_list %}
+  <img src="{{address}}" width="120" height="120">
+  {% endfor %}
+</div>
+<div style="text-align: center; margin-top:100px;">
+    <h4>Page Number: {{ page.number }} </h4>
+  </div>
+  <div style="text-align: center;">
+    {% if page.has_previous %}
+    <a href="{% url 'searchLatLon' %}?page={{  page.previous_page_number }}">Previous Page</a>
+    {% endif %}
+    {% if page.has_next %}
+    <a href="{% url 'searchLatLon' %}?page={{  page.next_page_number }}">Next Page</a>
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}
