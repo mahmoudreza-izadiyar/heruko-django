@@ -1,4 +1,3 @@
 django_heroku==0.3.1
-~jango==3.0.7
 flickrapi==2.4.0
 Django==3.1.5
